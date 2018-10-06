@@ -11,8 +11,25 @@ add_action('wp_enqueue_scripts', 'university_files');
 
 function university_features()
 {
-  
+
   add_theme_support('title-tag');
 }
 
 add_action('after_theme_support', 'university_features');
+
+function university_post_types()
+{
+  register_post_type('event', [
+    'supports' => ['title', 'editor', 'excerpt'],
+    'rewrite' => ['slug' => 'events'],
+    'has_archive' => true,
+    'public' => true,
+    'labels' => [
+      'name' => 'Events',
+      'add_new_item' => 'Add new event',
+      'edit_item' => 'Edit event'
+    ]
+  ]);
+}
+
+add_action('init', 'university_post_types');
