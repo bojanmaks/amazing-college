@@ -20,6 +20,41 @@ while(have_posts()) {
     <div class="generic-content"><?php the_content(); ?>
 
       <?php
+      $relatedProfessors = new WP_Query([
+        'posts_per_page' => -1,
+        'post_type' => 'professor',
+        'orderby' => 'title',
+        'order' => 'ASC',
+        'meta_query' => [
+          [
+            'key' => 'related_programs',
+            'compare' => 'LIKE',
+            'value' => '"' . get_the_ID() . '"'
+          ]
+        ]
+      ]);
+
+      if($relatedProfessors->have_posts())
+      {
+        echo '<hr class="section-break">';
+        echo '<h2 class="headling headling--medium">'. get_the_title() .' Professors</h2>';
+
+        echo '<ul class="professor-cards">';
+        while($relatedProfessors->have_posts())
+        {
+          $relatedProfessors->the_post();
+       ?>
+       <li class="professor-card__list-item"><a class="professor-card" href='<?php the_permalink() ?>'>
+         <img src="<?php the_post_thumbnail_url(); ?>" alt="" class="professor-card__image">
+         <span class="professor-card__name"><?php the_title(); ?></span>
+       </a></li>
+
+      <?php }
+      echo '</ul>';
+    }
+
+      Wp_reset_postdata();
+
         $today = date('Ymd');
         $homepageEvents = new WP_Query([
           'posts_per_page' => 2,
@@ -51,7 +86,7 @@ while(have_posts()) {
           {
             $homepageEvents->the_post();
          ?>
-         
+
         <div class="event-summary">
           <a class="event-summary__date t-center" href="#">
             <span class="event-summary__month"><?php

@@ -13,6 +13,10 @@ function university_features()
 {
 
   add_theme_support('title-tag');
+  add_theme_support('post-thumbnails');
+  add_image_size('professorLandscape', 400, 260, true);
+  add_image_size('professorPortrait', 480, 650, true);
+
 }
 
 add_action('after_theme_support', 'university_features');
@@ -40,6 +44,16 @@ function university_post_types()
       'name' => 'Programs',
       'add_new_item' => 'Add new program',
       'edit_item' => 'Edit program'
+    ]
+  ]);
+
+  register_post_type('professor', [
+    'supports' => ['title', 'editor', 'thumbnail'],
+    'public' => true,
+    'labels' => [
+      'name' => 'Professors',
+      'add_new_item' => 'Add new professor',
+      'edit_item' => 'Edit professor'
     ]
   ]);
 }
