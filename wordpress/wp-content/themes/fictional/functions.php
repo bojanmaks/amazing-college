@@ -27,6 +27,7 @@ function pageBanner($args = NULL)
 
 function university_files()
 {
+  wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=', NULL, '1.0', true);
   wp_enqueue_script('cust-script', get_theme_file_uri('/js/scripts-bundled.js'), NULL, microtime(), true);
   wp_enqueue_style('cusom-font', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
   wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
@@ -84,6 +85,19 @@ function university_post_types()
       'edit_item' => 'Edit professor'
     ]
   ]);
+
+  register_post_type('campus', [
+    'supports' => ['title', 'editor', 'excerpt'],
+    'rewrite' => ['slug' => 'campuses'],
+    'has_archive' => true,
+    'public' => true,
+    'labels' => [
+      'name' => 'Campuses',
+      'add_new_item' => 'Add new campus',
+      'edit_item' => 'Edit campus'
+    ]
+  ]);
+
 }
 
 add_action('init', 'university_post_types');
@@ -116,3 +130,11 @@ function university_adjust_queries($query)
 }
 
 add_action('pre_get_posts', 'university_adjust_queries');
+
+// function universityMapKey($api)
+// {
+//   $api['key'] = '';
+//   return $api;
+// }
+//
+// add_action('acf/fields/google_map/api', 'universityMapKey');
