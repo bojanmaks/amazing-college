@@ -56,6 +56,10 @@
       <i class="fa fa-search search-overlay__icon"></i>
       <input type="text" class="search-term" placeholder="What are you looging for ?" id="search-term">
       <i class="fa fa-window-close search-overlay__close"></i>
+    </div>
+  </div>
+  <div class="container">
+    <div id="search-overlay__results">
 
     </div>
   </div>
