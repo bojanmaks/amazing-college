@@ -42,8 +42,14 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults(){
-    this.resultsDiv.html('Imagine search results');
-    this.isSpinnerVisible = false;
+    $.getJSON('http://amazing-college.test/wp-json/wp/v2/posts?search=' + this.searchField.val(), posts =>{
+      this.resultsDiv.html(`
+        <h2 class="search-overlay__section-title">General information</h2>
+        <ul class="link-list min-list">
+          ${posts.map(item => `<li><a href="${item.link}">${item.title.rendered}</a>`)}
+        </ul>
+        `);
+    });
   }
   keyPressDispatcher(e){
     if(e.keyCode == 83 && !this.isOverlayOpen && !$("input, textarea").is(':focus')){
