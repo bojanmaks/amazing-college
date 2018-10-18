@@ -3,6 +3,7 @@ import $ from 'jquery';
 class Search {
   // 1.Describe and create/initialize the object
   constructor(){
+    this.addSearchHtml();
     this.openButton = $(".js-search-trigger");
     this.closeButton = $(".search-overlay__close");
     this.searchOverlay = $(".search-overlay");
@@ -32,7 +33,7 @@ class Search {
           this.resultsDiv.html('<div class="spinner-loader"></div>');
           this.isSpinnerVisible = true;
         }
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       } else {
         this.resultsDiv.html('');
         this.isSpinnerVisible = false;
@@ -42,13 +43,14 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults(){
-    $.getJSON('http://amazing-college.test/wp-json/wp/v2/posts?search=' + this.searchField.val(), posts =>{
+    $.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val(), posts =>{
       this.resultsDiv.html(`
         <h2 class="search-overlay__section-title">General information</h2>
-        <ul class="link-list min-list">
+        ${posts.length ? '<ul class="link-list min-list">' : '<p>No information matches</p>'}
           ${posts.map(item => `<li><a href="${item.link}">${item.title.rendered}</a>`)}
-        </ul>
+        ${posts? '</ul>' : ''}
         `);
+        this.isSpinnerVisible = false;
     });
   }
   keyPressDispatcher(e){
@@ -62,6 +64,8 @@ class Search {
   openOverlay(){
     this.searchOverlay.addClass("search-overlay--active");
     $("body").addClass("body-no-scroll");
+    this.searchField.val('');
+    setTime(()=> this.searchField.focus(), 301);
     this.isOverlayOpen = true;
   }
 
@@ -69,6 +73,25 @@ class Search {
     this.searchOverlay.removeClass("search-overlay--active");
     $("body").removeClass("body-no-scroll");
     this.isOverlayOpen = false;
+  }
+
+  addSearchHtml(){
+    $("body").append(`
+      <div class="search-overlay">
+        <div class="search-overlay__top">
+          <div class="container">
+            <i class="fa fa-search search-overlay__icon"></i>
+            <input type="text" class="search-term" placeholder="What are you looging for ?" id="search-term">
+            <i class="fa fa-window-close search-overlay__close"></i>
+          </div>
+        </div>
+        <div class="container">
+          <div id="search-overlay__results">
+
+          </div>
+        </div>
+      </div>
+    `);
   }
 
 }
