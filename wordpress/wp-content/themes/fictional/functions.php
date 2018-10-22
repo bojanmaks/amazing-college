@@ -1,4 +1,13 @@
 <?php
+require get_theme_file_path('/inc/search-route.php');
+
+function university_custom_rest(){
+  register_rest_field('post', 'authorName', [
+    'get_callback' => function(){return get_the_author();}
+  ]);
+}
+
+add_action('rest_api_init', 'university_custom_rest');
 
 function pageBanner($args = NULL)
 {
@@ -81,6 +90,7 @@ function university_post_types()
   ]);
 
   register_post_type('professor', [
+    'show_in_rest' => true,
     'supports' => ['title', 'editor', 'thumbnail'],
     'public' => true,
     'labels' => [
